@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="shortcut icon" href="./favicons.png" type="image/x-icon">
+    <script src="./app.js" defer></script>
+    <title>Bugdet App</title>
+    <style>
+        @media (max-width: 980px) {
+    .container {
+        max-width: 880px;
+    }
+}
+
+@media (max-width: 780px) {
+
+    html {
+        font-size: 57%;
+    }
+
+    .container {
+        max-width: 100%;
+    }
+
+    .budgetSection {
+        flex-direction: column;
+    }
+
+    .dashboard .total-balnace,
+    .addBudget {
+        width: 100%;
+    }
+
+    .expenseSection {
+        flex-direction: column;
+    }
+
+    .expense-list-card {
+        width: 100%;
+    }
+
+    .addExpense {
+        width: 100%;
+    }
+
+    .income-expense-cards {
+        width: 100%;
+        gap: 20px;
+        flex-direction: column;
+    }
+
+    .incomeCard,
+    .expenseCard{
+        width: 100%;
+    }
+}
+
+@media (max-width: 650px) {
+    html {
+        font-size: 50%;
+    }
+
+    ::placeholder {
+        font-size: 1.7rem;
+    }
+
+    h2{
+        font-size: 1.4rem !important;
+    }
+
+    .listITems .item .list-expense-title-desc {
+        width: 70%;
+    }
+
+    .incomeCard h2 {
+        font-size: 2rem !important;
+    }
+    .expenseCard h2{
+        font-size: 2rem !important;
+    }
+
+    #delete, #edit {
+        width: 11%;
+        padding: 0px;
+        height: 30px;
+    }
+
+    .main-title h2 {
+        font-size: 2.1rem !important;
+    }
+
+    #reset {
+        width: 70px;
+        border-radius: 15px;
+    }
+}
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    --main-color: #5D42BF;
+    --text-color: #292538;
+    --para-color: #495057;
+    --bg: #e7eaf2;
+    --card-bg: #fff;
+    --white: #fff;
+    --green:#8A9A5B;
+    --btn-color: linear-gradient(78.29deg, #3C3BA4 4.11%, #5854D8 117.86%);
+}
+
+body {
+    width: 100%;
+    height: 100%;
+    background-image: url(./assest/bg3.png);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-color: var(--bg);
+    /* padding-bottom: 50px; */
+}
+
+html {
+    font-size: 62.5%;
+    font-family: 'Poppins', sans-serif;
+}
+
+.container {
+    max-width: 990px;
+    padding-inline: 20px;
+    margin-inline: auto;
+}
+
+/* Utility Classes */
+
+h1 {
+    font-size: 3.5rem;
+    font-weight: 600;
+}
+
+h2 {
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+p {
+    font-size: 1.8rem;
+    color: var(--para-color);
+}
+
+a {
+    text-decoration: none;
+}
+
+ul {
+    list-style: none;
+}
+
+hr {
+    background: var(--text-color) !important;
+}
+
+.flex {
+    display: flex;
+    align-items: center;
+}
+
+.fl-col {
+    flex-direction: column;
+}
+
+::placeholder {
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.primary-btn {
+    width: 100%;
+    height: 45px;
+    color: var(--white);
+    background-color: var(--main-color);
+    border: 0;
+    outline: 0;
+    border-radius: 8px;
+    font-size: 1.6rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+    cursor: pointer;
+    box-shadow: 0px 0px 18px -5px var(--main-color);
+    transition: 0.7s ease;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.primary-btn:hover {
+    background-color: #5854D8;
+}
+
+.input-feild {
+    width: 100%;
+    outline: 0;
+    color: var(--para-color);
+    border: 2px solid var(--para-color);
+    background-color: var(--card-bg);
+    padding: 13px;
+    border-radius: 8px;
+}
+
+.input-feild:focus {
+    border-color: #5854D8;
+}
+
+.text-ellises {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: none;
+}
+
+
+/* header */
+
+header {
+    width: 100%;
+}
+
+nav {
+    padding: 20px;
+    width: 100%;
+    background-color: var(--bg);
+    box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.103);
+}
+
+.nav-title {
+    text-align: center;
+    font-size: 3rem;
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+.main-title {
+    width: 100%;
+    padding-block: 30px;
+    padding-left: 10px;
+    justify-content: space-between;
+}
+
+.reset-btn  {
+    width: 100px;
+    height: 40px;
+    font-size: 1.4rem;
+    border: 2px solid var(--para-color);
+    border-radius: 25px;
+    background-color: var(--white);
+    justify-content: center;
+    cursor: pointer;
+}
+
+.main-title .dashborad-title h1 {
+    font-size: 3.3rem;
+    color: var(--text-color);
+    margin-top: 10px;
+}
+
+.main-title .dashborad-title p {
+    font-size: 1.7rem;
+}
+
+.dashboard {
+    width: 100%;
+}
+
+.budgetSection {
+    width: 100%;
+    gap: 30px;
+    justify-content: space-between;
+}
+
+.dashboard .total-balnace {
+    width: 60%;
+    height: 200px;
+    padding-inline: 30px;
+    align-items: flex-start;
+    justify-content: center;
+    color: var(--white) !important;
+    background-color: lightblue;
+    border-radius: 20px;
+    background-image: url(./assest/Slice\ 1.jpg);
+    background-position: center;
+    background-size: cover;
+    box-shadow: 0px 0px 25px #3d3ba486;
+}
+
+.total-balnace .balance-title p {
+    font-size: 2.2rem;
+    color: var(--white) !important;
+}
+
+.total-balnace .balance-amount {
+    width: 100%;
+}
+
+.total-balnace .balance-amount h1 {
+    font-size: 4.6rem;
+}
+
+/* addBudget */
+
+.addBudget,
+.addExpense {
+    width: 35%;
+    gap: 20px;
+    align-items: flex-start;
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0px 0px 22px rgba(0, 0, 0, 0.14);
+}
+
+.addBudget .budget-title {
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.addBudget form {
+    width: 100%;
+    gap: 18px;
+}
+
+/* expenseSection */
+
+.expenseSection {
+    margin-top: 40px;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.expense-list-card {
+    width: 60%;
+    align-self: flex-start;
+    gap: 10px;
+}
+
+.income-expense-cards {
+    width: 100%;
+    justify-content: space-between;
+}
+
+.incomeCard,
+.expenseCard {
+    width: calc(50% - 10px);
+    height: 150px;
+    padding: 25px;
+    background: var(--card-bg);
+    border-radius: 12px;
+    align-items: flex-start;
+    justify-content: center;
+    overflow: hidden;
+    box-shadow: 0px 0px 25px rgba(234, 255, 239, 0.486);
+    transition: all 0.3s ease-in;
+    cursor: pointer;
+}
+
+.incomeCard {
+    background: rgba(120, 255, 154, 0.23);
+    backdrop-filter: blur(75px);
+}
+
+.incomeCard:hover {
+    background-color: #78ff9abb;
+}
+
+.expenseCard {
+    background: rgba(242, 27, 63, 0.23);
+    backdrop-filter: blur(75px);
+}
+
+.expenseCard:hover {
+    background-color: #f21b3f75;
+}
+
+.income-expense-cards>div>h2 {
+    font-size: 1.7rem;
+    color: var(--para-color);
+}
+
+.income-expense-cards>div>h1 {
+    font-size: 3.5rem;
+    color: var(--text-color);
+}
+
+/* addExpense */
+
+.addExpense {
+    align-self: flex-start;
+}
+
+.addExpense .expense-title {
+    width: 100%;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.addExpense form {
+    width: 100%;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.addExpense>form>div {
+    width: 100%;
+}
+
+.addExpense form div label {
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--para-color);
+}
+
+.addExpense form div input {
+    margin-top: 7px;
+}
+
+.addExpense form button {
+    margin-top: 20px;
+}
+
+/* expenseList  */
+
+.expenseList {
+    width: 100%;
+    /* border-top: 1px solid var(--text-color); */
+}
+
+.listITems {
+    gap: 15px;
+    padding-bottom: 20px;
+}
+
+.listITems .item {
+    width: 100%;
+    background: var(--card-bg);
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 22px rgba(0, 0, 0, 0.14);
+    justify-content: space-between;
+}
+
+.listITems .item .list-expense-title-desc {
+    width: 75%;
+    justify-content: space-between;
+    gap: 3px;
+
+}
+
+.listITems .item .list-expense-title-desc .list-expense-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.list-expense-title-desc .list-expense-desc {
+    font-size: 1.4rem;
+    color: var(--para-color);
+}
+
+.list-expense-amount {
+    width: 20%;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 5px;
+    /* border-left: 1px solid var(--text-color); */
+}
+
+.list-expense-amount span{
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.list-expense-amount .date {
+    font-size: 1.3rem;
+    color: var(--para-color);
+}
+
+.list-text {
+    align-items: flex-start;
+}
+
+#delete, #edit {
+    width: 8%;
+    padding: 10px;
+    font-size: 1.4rem;
+    color: var(--white);
+    background-color: #e63946;
+    border: 0;
+    outline: 0;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#edit {
+    background-color: #3C3BA4;
+    font-size: 1.3rem;
+}
+
+footer {
+    margin-top: 30px;
+    padding: 30px;
+    justify-content: space-between;
+}
+
+.footer-text {
+    font-size: 1.4rem;
+    color: var(--para-color);
+}
+
+.footer-social-icons {
+    gap: 20px;
+}
+
+.footer-social-icons a ion-icon {
+    font-size: 2.2rem;
+    color: var(--para-color);
+}
+
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="nav-title">
+            Budget Tool
+        </div>
+    </nav>
+
+    <header class="container">
+        <!-- Dashboard Title -->
+
+        <div class="main-title flex">
+            <div class="dashborad-title">
+                <h1 class="title">Dashboard</h1>
+                <p>Hello! Gubenthiran, Welcome Back. </p>
+            </div>
+            <div class="reset-btn flex" id="reset">
+                Reset
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+
+        <main class="dashboard ">
+
+            <!-- Budget Section -->
+
+            <div class="budgetSection flex">
+                <div class="total-balnace flex fl-col">
+                    <div class="balance-title">
+                        <p>Budget Amount</p>
+                    </div>
+                    <div class="balance-amount text-ellipise">
+                        <h1 id="balance-amount">Rs 00,000.00</h1>
+                    </div>
+                </div>
+
+                <!-- Add Budget Card -->
+
+                <div class="addBudget flex fl-col">
+                    <div class="budget-title">Budget</div>
+                    <form action="#" class="flex fl-col">
+                        <input type="number" class="input-feild" id="budgetAmount" placeholder="Enter your budget.."
+                            autofocus>
+                        <button class="primary-btn flex" id="addBudget">Add Budget <ion-icon
+                                name="arrow-forward-outline"></ion-icon></button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="expenseSection flex">
+
+                <!-- Income And Expense Card / Expense List -->
+
+                <div class="expense-list-card flex fl-col">
+
+
+                    <div class="income-expense-cards flex">
+
+                        <!-- Income Card -->
+
+                        <div class="incomeCard flex fl-col text-ellises">
+                            <h2 class="income-title">Current Amount</h2>
+                            <h1 id="currentAmount" class="current-amount">Rs 00,000</h1>
+                        </div>
+
+                        <!-- Expense Card -->
+
+                        <div class="expenseCard flex fl-col text-ellises">
+                            <h2 class="expense-title">Expense</h2>
+                            <h1 id="expenseAmount" class="expense-amount">Rs 00,000</h1>
+                        </div>
+                    </div>
+
+                    <!-- Expense List -->
+
+                    <div class="main-title">
+                        <h2>Expense List : </h2>
+                    </div>
+
+                    <div class="expenseList">
+                        <ul class="listITems flex fl-col" id="expenseList">
+
+                            <!-- Expense Items -->
+
+                            <!-- <li class="item flex">
+                                <div class="list-expense-title-desc text-ellises flex">
+                                    <div class="flex fl-col list-text">
+                                        <div class="list-expense-title">Dummy</div>
+                                        <div class="list-expense-desc">Lorem ipsum dolor sit amet.</div>
+                                    </div>
+                                    <div class="list-expense-amount flex fl-col">
+                                        <span>00</span>
+                                        <div class="date">17/07/2002</div>
+                                    </div>
+                                </div>
+                                <button id="delete">X</button>
+                            </li> -->
+
+
+                        </ul>
+                    </div>
+
+                </div>
+
+                <div class="addExpense flex fl-col">
+                    <div class="expense-title">Add Expense</div>
+                    <form action="#" class="flex fl-col expenseForm" required>
+                        <div>
+                            <label>Expense Title: </label>
+                            <input type="text" class="input-feild" id="expTitle"
+                                placeholder="Enter your expense title.." required maxlength="15" autocomplete="off">
+                        </div>
+                        <div>
+                            <label>Expense Description: </label>
+                            <input type="text" class="input-feild" id="expDesc" placeholder="Enter your expense Desc.."
+                                required maxlength="30" autocomplete="off">
+                        </div>
+                        <div>
+                            <label>Expense Amount: </label>
+                            <input type="number" class="input-feild" id="expAmount" placeholder="Enter your expense.."
+                                required autocomplete="off">
+                        </div>
+
+                        <div>
+                            <label>Current Date: </label>
+                            <input type="date" class="input-feild" id="date" placeholder="Enter your expense.." required
+                                autocomplete="off">
+                        </div>
+
+                        <button class="primary-btn flex" id="addExpense">Add Expense <ion-icon
+                                name="arrow-forward-outline"></ion-icon></button>
+                    </form>
+                </div>
+
+                <!-- Created By Muhammad Zain-ul-Abdin Ansari, Roll No : 87132 -->
+
+            </div>
+        </main>
+
+    </header>
+
+    <!-- Footer Section -->
+
+    <footer class="flex container">
+        <div class="footer-text">
+        
+        </div>
+    </footer>
+
+    <!-- ion-icon File -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <!-- Gsap Cdn -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.1/gsap.min.js"
+        integrity="sha512-qF6akR/fsZAB4Co1QDDnUXWnaQseLGXoniuSuSlPQK6+aWhlMZcHzkasCSlnWoe+TJuudlka1/IQ01Dnhgq95g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+    // All Variable Declerations
+
+const budget = document.getElementById("balance-amount");
+const currentAmount = document.getElementById("currentAmount");
+const expense = document.getElementById("expenseAmount")
+const add_budget_btn = document.getElementById("addBudget");
+const add_expense_btn = document.getElementById("addExpense");
+const budgetFeild = document.getElementById("budgetAmount");
+const expenseTitle = document.getElementById("expTitle");
+const expenseDesc = document.getElementById("expDesc");
+const expenseAmount = document.getElementById("expAmount");
+const expenseList = document.getElementById("expenseList");
+const deleteBtn = document.getElementById("delete");
+const resetWindow = document.getElementById("reset");
+const date = document.getElementById("date");
+let budgetNumber, expenseNumber;
+let expArray = [];
+
+
+// Add Budget To Respective Feilds 
+
+add_budget_btn.addEventListener(
+    'click', (e) => {
+        e.preventDefault();
+        if (budgetFeild.value > 0) {
+            budget.innerText = `Rs ${Number(budgetFeild.value).toFixed(2)}`;
+            currentAmount.innerText = `Rs ${Number(budgetFeild.value).toFixed(2)}`;
+            budgetNumber = Number(budgetFeild.value);
+            expenseAmount.innerText = 'Rs 00,00';
+            expense.innerText = `Rs 00,000`;
+            expArray.length = 0;
+
+        }
+        else
+            alert("Please Enter Your Budget Amount..");
+    }
+);
+
+// Function to Create Expense List
+
+const createExpenseList = (title, desc, amount,date) => {
+    let item = document.createElement("li");
+    item.className = 'item flex';
+
+    item.innerHTML = `
+   <div class="list-expense-title-desc text-ellises flex">
+            <div class="flex fl-col list-text">
+                <div class="list-expense-title">${title}</div>
+                <div class="list-expense-desc">${desc}</div>
+            </div>
+            <div class="list-expense-amount flex fl-col">
+                <span>${amount}</span>
+                <div class="date">${date}</div>
+            </div>
+        </div>
+            <button id="edit"><ion-icon name="create-outline"></ion-icon></button>
+            <button id="delete">X</button>
+    `;
+
+    expenseList.appendChild(item);
+
+    // Function to Delete Expense Items 
+
+    item.querySelector("#delete").addEventListener(
+        'click', () => {
+            item.remove();
+
+            let expenditure = parentElement.querySelector("span").innerText;
+
+            budgetNumber = parseInt(budgetNumber) + parseInt(expenditure);
+            expenseNumber = expenseNumber - parseInt(expenditure);
+            expArray = [expenseNumber];
+
+            currentAmount.innerText = `Rs ${parseInt(budgetNumber).toFixed(2)}`;
+            expense.innerText = `Rs ${(expenseNumber).toFixed(2)}`;
+
+
+            // console.log(budgetNumber,expenseNumber, expenditure);
+
+        }
+    );
+
+    // Function to Modify list Value 
+
+    let parentElement = item.querySelector("#edit").parentNode;
+
+    item.querySelector("#edit").addEventListener(
+        'click', () => {
+
+            let flag = confirm("You want to edit the expense list?");
+            if (flag) {
+
+                let editedTitle = prompt("Please Enter the Title.");
+                let editedDesc = prompt("Enter the Description.");
+                let editedAmount = +prompt("Please Enter the Amount.");
+
+                if (editedAmount < (budgetNumber + expenseNumber)) {
+                    parentElement.querySelector(".list-expense-title").innerText = editedTitle;
+                    parentElement.querySelector(".list-expense-desc").innerText = editedDesc;
+                    parentElement.querySelector("span").innerText = editedAmount;
+
+                    budgetNumber = (budgetNumber + Number(amount)) - editedAmount;
+                    expenseNumber = (expenseNumber - Number(amount)) + editedAmount;
+                    expArray = [expenseNumber];
+                    currentAmount.innerText = `Rs ${Number(budgetNumber).toFixed(2)}`;
+                    expense.innerText = `Rs ${(expenseNumber).toFixed(2)}`;
+
+                    console.log(budgetNumber);
+                }
+                else
+                    alert("You dont have enough balance.");
+            }
+        }
+    )
+}
+
+
+
+// Array that have multiple objects in their respective index containing list data
+
+let arrOfItems = [];
+var index = 0;
+
+// Class To create the List data as an Object then we push this data to our array 
+
+class List_data {
+    constructor(title, desc, amount, date) {
+        this.title = title;
+        this.desc = desc;
+        this.amount = amount;
+        this.date = date;
+    }
+}
+
+//  Add Expense to Respective Feilds 
+
+add_expense_btn.addEventListener(
+    'click', (e) => {
+
+        e.preventDefault();
+
+        if (budget.innerText === "Rs 00,000.00")
+            alert("Please Add Budget First!");
+
+        else {
+            if ((expenseTitle.value.length > 0 && expenseDesc.value.length > 0 && expenseAmount.value > 0 && date.value.length > 0)) {
+
+                // The Code Create Expense Items using Class and push it to the array;
+
+
+                if (budgetNumber >= expenseAmount.value) {
+                    let expenseItem = new List_data(expenseTitle.value, expenseDesc.value, expenseAmount.value, date.value);
+                    arrOfItems.push(expenseItem);
+
+
+                    createExpenseList(arrOfItems[index].title, arrOfItems[index].desc, arrOfItems[index].amount, arrOfItems[index].date);
+                    expArray.push(Number(expenseAmount.value));
+                    index++;
+
+                    expenseNumber = Number(expenseAmount.value);
+                }
+
+                console.log(expenseNumber);
+                updateBudget();
+                reset();
+            }
+        }
+    }
+);
+
+// Function To Calculate Budget and Expense:
+
+const updateBudget = () => {
+
+    if (budgetNumber >= expenseAmount.value) {
+        let currentBalanceNumber = budgetNumber - expenseNumber;
+        budgetNumber = currentBalanceNumber;
+        let currentExpenceNumber = expArray.reduce(
+            (a, b) => {
+                return a + b;
+            }
+        );
+        expenseNumber = currentExpenceNumber;
+        currentAmount.innerText = `Rs ${(currentBalanceNumber).toFixed(2)}`;
+        expense.innerText = `Rs ${(currentExpenceNumber).toFixed(2)}`;
+        
+    }
+
+    else
+        alert("You Dont Have Enough balance");
+}
+
+
+//Add Button To Reload Page
+
+resetWindow.addEventListener(
+    'click', () => {
+        location.reload();
+    }
+);
+
+// Reset Function
+
+function reset() {
+    budgetFeild.value = "";
+    expenseAmount.value = "";
+    expenseDesc.value = "";
+    expenseTitle.value = "";
+}
+
+/*Created This Budget App as a Assignment From SMIT (Saylani mass training program), it is open source project for every one if you find any bug in this project 
+feel free to edit  and update it..*/
+
+
+let tl = gsap.timeline({default: {duration: 0.2}});
+tl 
+    .from("nav",{opacity:0, y:10})
+    .from(".main-title", {opacity:0, y:10})
+    .from('.dashborad-title', {opacity:0, y:8})
+    .from(".budgetSection", {opacity:0, y:10})
+    .from(".income-expense-cards", {opacity:0, y:10})
+    .from(".addExpense", {opacity:0, y:10})
+    .from(".expenseList", {opacity:0, y:10})
+    
+</script>    
+    
+</body>
+
+</html>
